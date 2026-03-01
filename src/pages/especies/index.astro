@@ -37,14 +37,34 @@ const t = useTranslations('es');
   <!-- Species grid -->
   <section class="species-content section">
     <div class="container">
-      <div class="species-grid" id="all">
+      <div class="species-grid">
         {species.map((sp, i) => (
-          <SpeciesCard species={sp} lang="es" index={i} />
+          <div data-trap={sp.trapType}>
+            <SpeciesCard species={sp} lang="es" index={i} />
+          </div>
         ))}
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  const btns = document.querySelectorAll<HTMLAnchorElement>('.filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('[data-trap]');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      btns.forEach(b => b.classList.remove('filter-btn--active'));
+      btn.classList.add('filter-btn--active');
+      const filter = btn.getAttribute('href')?.slice(1) ?? 'all';
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.trap === filter;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>
 
 <style>
   .species-hero {
@@ -98,7 +118,7 @@ const t = useTranslations('es');
     letter-spacing: 0.06em;
     color: var(--cream-dim);
     padding: 0.3rem 0.9rem;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(0,0,0,0.12);
     text-decoration: none;
     transition: all 180ms ease;
   }
