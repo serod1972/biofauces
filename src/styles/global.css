@@ -1,6 +1,6 @@
 /* ============================================================
    BIOFAUCES — Global Styles
-   Aesthetic: Dark Botanical Museum
+   Aesthetic: Light Botanical Museum
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
@@ -8,26 +8,27 @@
 /* ---- Custom Properties ---- */
 :root {
   /* Colors from Biofauces logo */
-  --bg-primary:    #080C04;
-  --bg-secondary:  #101508;
-  --bg-card:       #141a09;
-  --bg-elevated:   #1c2410;
+  --bg-primary:    #FAFAF6;
+  --bg-secondary:  #F2F0E8;
+  --bg-card:       #FFFFFF;
+  --bg-elevated:   #E8E5DB;
 
-  --green-deep:    #3D4F12;
+  --green-deep:    #1E2E06;
   --green-mid:     #4A5C1A;
-  --green-light:   #7A9A2A;
-  --green-bright:  #9DC334;
-  --green-muted:   #2a3810;
+  --green-light:   #4E6218;
+  --green-bright:  #5F7820;
+  --green-muted:   #D4DCAC;
 
   --crimson:       #8B2212;
   --crimson-mid:   #A82C18;
   --crimson-bright:#C43B26;
-  --crimson-pale:  #3d1208;
+  --crimson-pale:  #FCEAE6;
 
-  --cream:         #F0EDE4;
-  --cream-dim:     #C8C3B5;
-  --cream-muted:   #8a8578;
-  --cream-faint:   #3a3830;
+  /* Text — dark on light backgrounds */
+  --cream:         #1A1A12;
+  --cream-dim:     #3A3A28;
+  --cream-muted:   #6A6A52;
+  --cream-faint:   #C4C0B0;
 
   /* Typography */
   --font-display:  'Cormorant Garamond', Georgia, serif;
@@ -52,10 +53,10 @@
   --transition-slow: 600ms ease;
 
   /* Shadows */
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.3);
-  --shadow-image: 0 8px 40px rgba(0,0,0,0.7);
-  --glow-green: 0 0 24px rgba(74, 92, 26, 0.3);
-  --glow-crimson: 0 0 24px rgba(139, 34, 18, 0.35);
+  --shadow-card: 0 2px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-image: 0 8px 32px rgba(0,0,0,0.12);
+  --glow-green: 0 0 24px rgba(74, 92, 26, 0.12);
+  --glow-crimson: 0 0 24px rgba(139, 34, 18, 0.10);
 }
 
 /* ---- Reset ---- */
@@ -87,7 +88,7 @@ body::before {
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   background-size: 256px 256px;
-  opacity: 0.025;
+  opacity: 0.012;
   pointer-events: none;
   z-index: 9999;
 }
@@ -210,13 +211,13 @@ strong {
 .btn--primary {
   background: var(--crimson);
   border-color: var(--crimson-mid);
-  color: var(--cream);
+  color: #FAFAF6;
 }
 .btn--primary::before {
   background: var(--crimson-mid);
 }
 .btn--primary:hover {
-  color: var(--cream);
+  color: #FAFAF6;
 }
 
 .btn--outline {
@@ -228,7 +229,7 @@ strong {
   background: var(--green-muted);
 }
 .btn--outline:hover {
-  color: var(--cream);
+  color: #FAFAF6;
 }
 
 /* ---- Badge ---- */
@@ -243,13 +244,13 @@ strong {
   border-radius: var(--radius-sm);
 }
 
-.badge--easy    { background: rgba(74,92,26,0.3); color: var(--green-bright); border: 1px solid var(--green-mid); }
-.badge--medium  { background: rgba(180,120,20,0.25); color: #d4a840; border: 1px solid #7a5a1a; }
-.badge--hard    { background: rgba(139,34,18,0.3); color: var(--crimson-bright); border: 1px solid var(--crimson); }
+.badge--easy    { background: rgba(74,92,26,0.1); color: #2A3E08; border: 1px solid rgba(74,92,26,0.35); }
+.badge--medium  { background: rgba(150,100,15,0.1); color: #6B4A08; border: 1px solid rgba(150,100,15,0.35); }
+.badge--hard    { background: rgba(139,34,18,0.1); color: #6B1808; border: 1px solid rgba(139,34,18,0.35); }
 
-.badge--active   { background: rgba(139,34,18,0.25); color: #e06050; border: 1px solid var(--crimson); }
-.badge--passive  { background: rgba(40,80,30,0.3); color: var(--green-light); border: 1px solid var(--green-mid); }
-.badge--adhesive { background: rgba(100,60,140,0.25); color: #b080e0; border: 1px solid #6a3a9a; }
+.badge--active   { background: rgba(139,34,18,0.1); color: #6B1808; border: 1px solid rgba(139,34,18,0.35); }
+.badge--passive  { background: rgba(40,80,30,0.1); color: #2A4A1A; border: 1px solid rgba(40,80,30,0.35); }
+.badge--adhesive { background: rgba(80,40,120,0.1); color: #3A1A6B; border: 1px solid rgba(80,40,120,0.35); }
 
 /* ---- Decorative Elements ---- */
 .deco-line {
@@ -367,11 +368,11 @@ th {
 td {
   padding: 0.6rem 1rem;
   color: var(--cream-dim);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
 tr:hover td {
-  background: rgba(255,255,255,0.02);
+  background: rgba(0,0,0,0.02);
 }
 
 /* ---- Responsive ---- */
