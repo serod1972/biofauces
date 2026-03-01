@@ -20,15 +20,47 @@ export function useTranslations(lang: Lang) {
 export function getAlternateLangPath(url: URL, targetLang: Lang): string {
   const pathname = url.pathname;
   const base = pathname.startsWith('/biofauces') ? '/biofauces' : '';
-  const clean = pathname.replace(/^\/biofauces/, '');
+  const clean = pathname.replace(/^\/biofauces/, '').replace(/\/$/, '') || '/';
 
-  if (targetLang === 'es') {
-    // Remove /en prefix
-    return base + clean.replace(/^\/en/, '') || base + '/';
+  // Page name mapping ES → EN
+  const esSegToEn: Record<string, string> = {
+    'especies': 'species',
+    'cuidados': 'care',
+    'galeria': 'gallery',
+  };
+  // Page name mapping EN → ES
+  const enSegToEs: Record<string, string> = {
+    'species': 'especies',
+    'care': 'cuidados',
+    'gallery': 'galeria',
+  };
+
+  if (targetLang === 'en') {
+    if (clean === '/') return base + '/en/';
+    // /especies/[slug] → /en/species/[en-slug]
+    const especieMatch = clean.match(/^\/especies\/(.+)$/);
+    if (especieMatch) {
+      const enSlug = slugMap[especieMatch[1]] || especieMatch[1];
+      return base + `/en/species/${enSlug}/`;
+    }
+    // /especies → /en/species, /cuidados → /en/care, /galeria → /en/gallery
+    const seg = clean.split('/')[1];
+    const mapped = esSegToEn[seg];
+    if (mapped) return base + `/en/${mapped}/`;
+    return base + '/en' + clean + '/';
   } else {
-    // Add /en prefix
-    if (clean.startsWith('/en')) return pathname;
-    return base + '/en' + (clean === '/' ? '' : clean);
+    if (clean === '/en' || clean === '') return base + '/';
+    // /en/species/[slug] → /especies/[es-slug]
+    const speciesMatch = clean.match(/^\/en\/species\/(.+)$/);
+    if (speciesMatch) {
+      const esSlug = slugMapReverse[speciesMatch[1]] || speciesMatch[1];
+      return base + `/especies/${esSlug}/`;
+    }
+    // /en/species → /especies, /en/care → /cuidados, /en/gallery → /galeria
+    const seg = clean.split('/')[2];
+    const mapped = enSegToEs[seg];
+    if (mapped) return base + `/${mapped}/`;
+    return base + clean.replace(/^\/en/, '') + '/' || base + '/';
   }
 }
 
