@@ -1,0 +1,115 @@
+---
+interface GalleryItem {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  items: GalleryItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="gallery-grid">
+  {items.map((item, i) => (
+    <figure
+      class={`gallery-item gallery-item--${(i % 6) + 1} reveal reveal--${(i % 4) + 1}`}
+    >
+      <div class="gallery-item__img-wrap">
+        <img
+          src={item.src}
+          alt={item.alt}
+          class="gallery-item__img"
+          loading="lazy"
+          width="600"
+          height="400"
+        />
+        <div class="gallery-item__overlay">
+          {item.caption && (
+            <figcaption class="gallery-item__caption">{item.caption}</figcaption>
+          )}
+        </div>
+      </div>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 220px;
+    gap: 0.5rem;
+  }
+
+  /* Varied sizes for masonry feel */
+  .gallery-item--1 { grid-row: span 2; }
+  .gallery-item--4 { grid-column: span 2; }
+  .gallery-item--7 { grid-row: span 2; }
+  .gallery-item--10 { grid-column: span 2; }
+
+  .gallery-item {
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-card);
+  }
+
+  .gallery-item__img-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gallery-item__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .gallery-item:hover .gallery-item__img {
+    transform: scale(1.08);
+  }
+
+  .gallery-item__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(8,12,4,0.85) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+
+  .gallery-item:hover .gallery-item__overlay {
+    opacity: 1;
+  }
+
+  .gallery-item__caption {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+  }
+
+  @media (max-width: 900px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .gallery-item--1 { grid-row: span 1; }
+    .gallery-item--4 { grid-column: span 1; }
+    .gallery-item--7 { grid-row: span 1; }
+    .gallery-item--10 { grid-column: span 1; }
+  }
+
+  @media (max-width: 500px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: 240px;
+    }
+  }
+</style>

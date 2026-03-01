@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <rect width="100" height="100" rx="20" fill="#080C04"/>
+  <!-- Cilia -->
+  <line x1="50" y1="55" x2="22" y2="18" stroke="#8B2212" stroke-width="2" stroke-linecap="round"/>
+  <line x1="50" y1="55" x2="30" y2="12" stroke="#8B2212" stroke-width="2" stroke-linecap="round"/>
+  <line x1="50" y1="55" x2="40" y2="8"  stroke="#8B2212" stroke-width="2" stroke-linecap="round"/>
+  <line x1="50" y1="55" x2="50" y2="7"  stroke="#8B2212" stroke-width="2" stroke-linecap="round"/>
+  <line x1="50" y1="55" x2="60" y2="8"  stroke="#8B2212" stroke-width="2" stroke-linecap="round"/>
+  <line x1="50" y1="55" x2="70" y2="12" stroke="#8B2212" stroke-width="2" stroke-linecap="round"/>
+  <line x1="50" y1="55" x2="78" y2="18" stroke="#8B2212" stroke-width="2" stroke-linecap="round"/>
+  <!-- Trap body -->
+  <path d="M20 55 Q35 46 50 55 Q65 64 80 55" stroke="#4A5C1A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Stem -->
+  <path d="M50 56 Q36 70 28 88" stroke="#3D4F12" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

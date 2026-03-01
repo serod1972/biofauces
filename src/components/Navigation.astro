@@ -1,0 +1,257 @@
+---
+import { useTranslations, getAlternateLangPath, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang?: string;
+}
+
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang as Lang);
+const base = import.meta.env.BASE_URL;
+
+// Remove trailing slash from base
+const b = base.endsWith('/') ? base.slice(0, -1) : base;
+
+const isEs = lang === 'es';
+const navLinks = isEs
+  ? [
+      { href: `${b}/`, label: t('nav.home') },
+      { href: `${b}/especies/`, label: t('nav.species') },
+      { href: `${b}/cuidados/`, label: t('nav.care') },
+      { href: `${b}/galeria/`, label: t('nav.gallery') },
+    ]
+  : [
+      { href: `${b}/en/`, label: t('nav.home') },
+      { href: `${b}/en/species/`, label: t('nav.species') },
+      { href: `${b}/en/care/`, label: t('nav.care') },
+      { href: `${b}/en/gallery/`, label: t('nav.gallery') },
+    ];
+
+const altLang = isEs ? 'en' : 'es';
+const altHref = getAlternateLangPath(Astro.url, altLang as Lang);
+---
+
+<header class="nav">
+  <div class="container nav__inner">
+    <!-- Logo -->
+    <a href={isEs ? `${b}/` : `${b}/en/`} class="nav__logo" aria-label="Biofauces">
+      <div class="nav__logo-icon">
+        <img
+          src={`${b}/logo-biofauces.jpg`}
+          alt="Biofauces logo"
+          class="nav__logo-img"
+          width="40"
+          height="40"
+        />
+      </div>
+      <span class="nav__logo-text">BIOFAUCES</span>
+    </a>
+
+    <!-- Nav links -->
+    <nav class="nav__links" aria-label="Main navigation">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class={`nav__link ${Astro.url.pathname === link.href ? 'nav__link--active' : ''}`}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Lang switcher + mobile toggle -->
+    <div class="nav__actions">
+      <a href={altHref} class="nav__lang" aria-label={`Switch to ${altLang === 'en' ? 'English' : 'Español'}`}>
+        {altLang === 'en' ? 'EN' : 'ES'}
+      </a>
+      <button class="nav__toggle" aria-label="Toggle menu" id="nav-toggle">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const links = document.querySelector('.nav__links');
+  toggle?.addEventListener('click', () => {
+    links?.classList.toggle('nav__links--open');
+    toggle.classList.toggle('nav__toggle--open');
+  });
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: linear-gradient(180deg, rgba(8,12,4,0.97) 0%, rgba(8,12,4,0.85) 100%);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(74, 92, 26, 0.2);
+    padding: 0.75rem 0;
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .nav__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .nav__logo-icon {
+    flex-shrink: 0;
+  }
+
+  .nav__logo-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 180ms ease;
+  }
+
+  .nav__logo:hover .nav__logo-img {
+    opacity: 0.85;
+  }
+
+  .nav__logo-text {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+    transition: color 180ms ease;
+  }
+
+  .nav__logo:hover .nav__logo-text {
+    color: var(--green-light);
+  }
+
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav__link {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    text-decoration: none;
+    position: relative;
+    transition: color 180ms ease;
+  }
+
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--crimson);
+    transform: scaleX(0);
+    transition: transform 320ms ease;
+    transform-origin: left;
+  }
+
+  .nav__link:hover,
+  .nav__link--active {
+    color: var(--cream);
+  }
+
+  .nav__link:hover::after,
+  .nav__link--active::after {
+    transform: scaleX(1);
+  }
+
+  .nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .nav__lang {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--cream-muted);
+    text-decoration: none;
+    border: 1px solid var(--cream-faint);
+    padding: 0.25rem 0.6rem;
+    transition: all 180ms ease;
+  }
+
+  .nav__lang:hover {
+    color: var(--green-light);
+    border-color: var(--green-mid);
+  }
+
+  .nav__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .nav__toggle span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: var(--cream-dim);
+    transition: all 280ms ease;
+  }
+
+  @media (max-width: 768px) {
+    .nav__links {
+      display: none;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      background: rgba(8,12,4,0.98);
+      flex-direction: column;
+      padding: 2rem;
+      gap: 1.5rem;
+      border-bottom: 1px solid rgba(74,92,26,0.2);
+    }
+
+    .nav__links--open {
+      display: flex;
+    }
+
+    .nav__toggle {
+      display: flex;
+    }
+
+    .nav__toggle--open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+    .nav__toggle--open span:nth-child(2) {
+      opacity: 0;
+    }
+    .nav__toggle--open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+  }
+</style>

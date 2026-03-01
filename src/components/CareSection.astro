@@ -1,0 +1,137 @@
+---
+interface Props {
+  title: string;
+  text: string;
+  tip: string;
+  icon: string;
+  index?: number;
+}
+
+const { title, text, tip, icon, index = 0 } = Astro.props;
+---
+
+<div class={`care-section reveal reveal--${(index % 4) + 1}`}>
+  <div class="care-section__icon-wrap">
+    <div class="care-section__icon" set:html={icon}></div>
+    <div class="care-section__icon-glow"></div>
+  </div>
+
+  <div class="care-section__content">
+    <h3 class="care-section__title">{title}</h3>
+    <p class="care-section__text">{text}</p>
+
+    <div class="care-section__tip">
+      <span class="care-section__tip-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/>
+          <path d="M9 21h6M10 17v4M14 17v4"/>
+        </svg>
+        Tip
+      </span>
+      <p class="care-section__tip-text">{tip}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .care-section {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    background: var(--bg-card);
+    border: 1px solid rgba(74, 92, 26, 0.1);
+    border-left: 3px solid var(--crimson);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .care-section:hover {
+    border-left-color: var(--crimson-bright);
+    box-shadow: var(--glow-crimson);
+  }
+
+  .care-section__icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 0.25rem;
+  }
+
+  .care-section__icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    color: var(--green-light);
+  }
+
+  .care-section__icon :global(svg) {
+    width: 36px;
+    height: 36px;
+  }
+
+  .care-section__icon-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(74,92,26,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .care-section__title {
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+  }
+
+  .care-section__text {
+    color: var(--cream-dim);
+    font-size: 0.98rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+    max-width: none;
+  }
+
+  .care-section__tip {
+    background: rgba(139, 34, 18, 0.08);
+    border: 1px solid rgba(139, 34, 18, 0.2);
+    padding: 0.875rem 1.125rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .care-section__tip-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crimson-mid);
+  }
+
+  .care-section__tip-text {
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    font-style: italic;
+    max-width: none;
+    margin: 0;
+  }
+
+  @media (max-width: 600px) {
+    .care-section {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .care-section__icon-wrap {
+      justify-content: flex-start;
+    }
+  }
+</style>

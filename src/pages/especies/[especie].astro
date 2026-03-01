@@ -1,0 +1,517 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { species, getSpeciesBySlug } from '../../data/species';
+import { useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return species.map(sp => ({
+    params: { especie: sp.slug },
+  }));
+}
+
+const { especie } = Astro.params;
+const sp = getSpeciesBySlug(especie!);
+
+if (!sp) {
+  return Astro.redirect('/especies/');
+}
+
+const t = useTranslations('es');
+const base = import.meta.env.BASE_URL;
+const b = base.endsWith('/') ? base.slice(0, -1) : base;
+
+const diffLabel = t(`species.${sp.difficulty}` as any);
+---
+
+<BaseLayout
+  title={sp.nameEs}
+  description={sp.descriptionEs.slice(0, 160)}
+  image={sp.image}
+  lang="es"
+>
+  <!-- Hero image -->
+  <section class="detail-hero">
+    <div class="detail-hero__image-wrap">
+      <img
+        src={sp.image}
+        alt={`${sp.nameEs} — ${sp.scientific}`}
+        class="detail-hero__image"
+        width="1200"
+        height="600"
+      />
+      <div class="detail-hero__overlay"></div>
+    </div>
+    <div class="detail-hero__content container">
+      <a href={`${b}/especies/`} class="detail-back reveal">
+        ← {t('detail.back')}
+      </a>
+      <p class="detail-scientific reveal reveal--2">{sp.scientific}</p>
+      <h1 class="detail-title reveal reveal--3">{sp.nameEs}</h1>
+      <div class="detail-badges reveal reveal--4">
+        <span class={`badge badge--${sp.difficulty}`}>{diffLabel}</span>
+        <span class={`badge badge--${sp.trapType}`}>{sp.mechanismEs}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main content -->
+  <section class="detail-content section">
+    <div class="container">
+      <div class="detail-grid">
+        <!-- Description + care -->
+        <div class="detail-main">
+          <div class="detail-description reveal">
+            <h2 class="detail-section-title">Descripción</h2>
+            <p>{sp.descriptionEs}</p>
+          </div>
+
+          <div class="detail-care-text reveal reveal--2">
+            <h2 class="detail-section-title">{t('detail.care')}</h2>
+            <p>{sp.careEs}</p>
+            {sp.careGroups && (
+              <div class="care-groups">
+                {sp.careGroups.map(g => (
+                  <div class={`care-group care-group--${g.color}`}>
+                    <div class="care-group__header">
+                      <span class="care-group__name">{g.name}</span>
+                      <span class="care-group__altitude">{g.altitude}</span>
+                    </div>
+                    <dl class="care-group__specs">
+                      <dt>Día</dt><dd>{g.tempDay}</dd>
+                      <dt>Noche</dt><dd>{g.tempNight}</dd>
+                      <dt>Humedad</dt><dd>{g.humidity}</dd>
+                    </dl>
+                    <p class="care-group__examples"><em>{g.examplesEs}</em></p>
+                    <p class="care-group__note">{g.noteEs}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div class="detail-curiosity reveal reveal--3">
+            <div class="curiosity-inner">
+              <span class="curiosity-icon">✦</span>
+              <div>
+                <strong class="curiosity-label">{t('detail.curiosity')}</strong>
+                <p>{sp.curiosityEs}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data table -->
+        <aside class="detail-aside reveal reveal--2">
+          <div class="detail-card">
+            <h3 class="detail-card__title">Ficha técnica</h3>
+            <dl class="detail-specs">
+              <dt>{t('detail.scientific')}</dt>
+              <dd><em>{sp.scientific}</em></dd>
+
+              <dt>{t('detail.family')}</dt>
+              <dd>{sp.family}</dd>
+
+              <dt>{t('detail.origin')}</dt>
+              <dd>{sp.originEs}</dd>
+
+              <dt>{t('detail.mechanism')}</dt>
+              <dd>{sp.mechanismEs}</dd>
+
+              <dt>{t('detail.difficulty')}</dt>
+              <dd><span class={`badge badge--${sp.difficulty}`}>{diffLabel}</span></dd>
+
+              <dt>{t('detail.light')}</dt>
+              <dd>{sp.light}</dd>
+
+              <dt>{t('detail.water')}</dt>
+              <dd>{sp.water}</dd>
+
+              <dt>{t('detail.humidity')}</dt>
+              <dd>{sp.humidity}</dd>
+
+              <dt>{t('detail.temperature')}</dt>
+              <dd>{sp.temperature}</dd>
+
+              <dt>{t('detail.substrate')}</dt>
+              <dd>{sp.substrate}</dd>
+
+              <dt>{t('detail.dormancy')}</dt>
+              <dd>{sp.dormancyEs}</dd>
+            </dl>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Photo gallery -->
+      {sp.images.length > 1 && (
+        <div class="detail-gallery reveal">
+          <h2 class="detail-section-title">Galería</h2>
+          <div class="detail-gallery__grid">
+            {sp.images.map((img, i) => (
+              <div class="detail-gallery__item">
+                <img
+                  src={img}
+                  alt={`${sp.nameEs} foto ${i + 1}`}
+                  loading="lazy"
+                  width="400"
+                  height="300"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Back link -->
+      <div class="detail-nav reveal">
+        <a href={`${b}/especies/`} class="btn btn--outline">
+          ← {t('detail.back')}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .detail-hero {
+    position: relative;
+    height: 70vh;
+    min-height: 400px;
+    max-height: 700px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .detail-hero__image-wrap {
+    position: absolute;
+    inset: 0;
+  }
+
+  .detail-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .detail-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      0deg,
+      rgba(8,12,4,1) 0%,
+      rgba(8,12,4,0.6) 40%,
+      rgba(8,12,4,0.1) 100%
+    );
+  }
+
+  .detail-hero__content {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detail-back {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--cream-muted);
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    transition: color 180ms ease;
+  }
+
+  .detail-back:hover {
+    color: var(--green-light);
+  }
+
+  .detail-scientific {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--crimson-mid);
+    margin-bottom: 0.5rem;
+    max-width: none;
+  }
+
+  .detail-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+
+  .detail-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Grid layout */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: var(--space-xl);
+    align-items: start;
+    margin-bottom: var(--space-xl);
+  }
+
+  .detail-section-title {
+    font-size: 1.4rem;
+    color: var(--green-light);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(74,92,26,0.2);
+  }
+
+  .detail-description,
+  .detail-care-text {
+    margin-bottom: var(--space-lg);
+  }
+
+  .detail-description p,
+  .detail-care-text p {
+    line-height: 1.8;
+    font-size: 1rem;
+  }
+
+  /* Curiosity box */
+  .detail-curiosity {
+    margin-bottom: var(--space-lg);
+  }
+
+  .curiosity-inner {
+    display: flex;
+    gap: 1rem;
+    background: rgba(139,34,18,0.07);
+    border: 1px solid rgba(139,34,18,0.2);
+    border-left: 3px solid var(--crimson);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .curiosity-icon {
+    font-size: 1.2rem;
+    color: var(--crimson-mid);
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+
+  .curiosity-label {
+    display: block;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crimson-mid);
+    margin-bottom: 0.4rem;
+  }
+
+  .curiosity-inner p {
+    font-style: italic;
+    color: var(--cream-dim);
+    font-size: 0.95rem;
+    max-width: none;
+    margin: 0;
+  }
+
+  /* Aside card */
+  .detail-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(74,92,26,0.2);
+    padding: 1.5rem;
+    position: sticky;
+    top: 90px;
+  }
+
+  .detail-card__title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .detail-specs {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.1rem 1rem;
+  }
+
+  .detail-specs dt {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    white-space: nowrap;
+  }
+
+  .detail-specs dd {
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .detail-specs dd em {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    color: var(--crimson-mid);
+  }
+
+  /* Gallery */
+  .detail-gallery {
+    margin-bottom: var(--space-xl);
+  }
+
+  .detail-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .detail-gallery__item {
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+
+  .detail-gallery__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .detail-gallery__item:hover img {
+    transform: scale(1.05);
+  }
+
+  .detail-nav {
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* Care groups (Nepenthes) */
+  .care-groups {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .care-group {
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 1.2rem 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .care-group--lowland     { border-top: 3px solid #D97A3A; background: rgba(184,92,20,0.10); }
+  .care-group--intermediate { border-top: 3px solid #7A9A2A; background: rgba(74,92,26,0.12); }
+  .care-group--highland    { border-top: 3px solid #5AABCC; background: rgba(42,107,138,0.12); }
+
+  .care-group__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .care-group__name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .care-group--lowland     .care-group__name { color: #E8924A; }
+  .care-group--intermediate .care-group__name { color: #9ABF3A; }
+  .care-group--highland    .care-group__name { color: #6DC5E8; }
+
+  .care-group__altitude {
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: #D0C9BB;
+    background: rgba(255,255,255,0.10);
+    padding: 0.2rem 0.55rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .care-group__specs {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.1rem 0.8rem;
+  }
+
+  .care-group__specs dt {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #C0BAB0;
+    padding: 0.25rem 0;
+  }
+
+  .care-group__specs dd {
+    font-size: 0.95rem;
+    color: #EDE9E0;
+    padding: 0.25rem 0;
+    font-weight: 600;
+  }
+
+  .care-group__examples {
+    font-size: 0.88rem;
+    color: #D0C9BB;
+    font-style: italic;
+    margin: 0;
+    line-height: 1.6;
+    max-width: none;
+  }
+
+  .care-group__note {
+    font-size: 0.88rem;
+    color: #EDE9E0;
+    margin: 0;
+    line-height: 1.6;
+    max-width: none;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    padding-top: 0.65rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .detail-card {
+      position: static;
+    }
+
+    .detail-gallery__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .care-groups { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 500px) {
+    .detail-gallery__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

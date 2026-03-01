@@ -1,0 +1,482 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SpeciesCard from '../components/SpeciesCard.astro';
+import { getFeaturedSpecies } from '../data/species';
+import { useTranslations } from '../i18n/utils';
+
+const t = useTranslations('es');
+const featured = getFeaturedSpecies();
+const base = import.meta.env.BASE_URL;
+const b = base.endsWith('/') ? base.slice(0, -1) : base;
+---
+
+<BaseLayout
+  title="Inicio"
+  description="Biofauces — El mundo de las plantas carnívoras. Descubre fichas de especies, guías de cuidados y galería fotográfica."
+  lang="es"
+>
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <!-- Botanical background decoration -->
+    <div class="hero__bg" aria-hidden="true">
+      <svg class="hero__bg-svg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Large cilia arc -->
+        <g opacity="0.12">
+          {Array.from({length: 18}).map((_, i) => {
+            const angle = (i / 17) * 180 - 90;
+            const rad = angle * Math.PI / 180;
+            const x1 = 600 + Math.cos(rad) * 80;
+            const y1 = 650 + Math.sin(rad) * 80;
+            const x2 = 600 + Math.cos(rad) * 380;
+            const y2 = 650 + Math.sin(rad) * 380;
+            return <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8B2212" stroke-width="1.5" stroke-linecap="round"/>;
+          })}
+          <ellipse cx="600" cy="650" rx="80" ry="40" stroke="#4A5C1A" stroke-width="2.5"/>
+          <path d="M520 650 Q600 620 680 650" stroke="#3D4F12" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M600 650 Q540 700 480 760" stroke="#3D4F12" stroke-width="2"/>
+        </g>
+        <!-- Smaller decorative plants left -->
+        <g opacity="0.08" transform="translate(80, 200)">
+          {Array.from({length: 10}).map((_, i) => {
+            const angle = (i / 9) * 180 - 90;
+            const rad = angle * Math.PI / 180;
+            const x2 = Math.cos(rad) * 120;
+            const y2 = Math.sin(rad) * 120;
+            return <line x1="0" y1="0" x2={x2} y2={y2} stroke="#8B2212" stroke-width="1" stroke-linecap="round"/>;
+          })}
+          <ellipse cx="0" cy="0" rx="30" ry="15" stroke="#4A5C1A" stroke-width="1.5"/>
+        </g>
+        <!-- Right decoration -->
+        <g opacity="0.07" transform="translate(1100, 150)">
+          {Array.from({length: 10}).map((_, i) => {
+            const angle = (i / 9) * 180 - 90;
+            const rad = angle * Math.PI / 180;
+            const x2 = Math.cos(rad) * 90;
+            const y2 = Math.sin(rad) * 90;
+            return <line x1="0" y1="0" x2={x2} y2={y2} stroke="#8B2212" stroke-width="1" stroke-linecap="round"/>;
+          })}
+          <ellipse cx="0" cy="0" rx="22" ry="11" stroke="#4A5C1A" stroke-width="1.5"/>
+        </g>
+        <!-- Gradient background -->
+        <defs>
+          <radialGradient id="heroBg" cx="50%" cy="80%" r="60%">
+            <stop offset="0%" stop-color="#1c2410" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#080C04" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="1200" height="700" fill="url(#heroBg)"/>
+      </svg>
+    </div>
+
+    <div class="container hero__content">
+      <p class="hero__eyebrow reveal reveal--1">
+        <span class="deco-dot"></span>
+        Biofauces
+        <span class="deco-dot"></span>
+      </p>
+      <h1 class="hero__title reveal reveal--2">
+        El Mundo de las<br/>
+        <em>Plantas Carnívoras</em>
+      </h1>
+      <p class="hero__subtitle reveal reveal--3">
+        Descubre las fascinantes especies que han conquistado los entornos más inhóspitos del planeta convirtiendo la caza en arte.
+      </p>
+      <div class="hero__ctas reveal reveal--4">
+        <a href={`${b}/especies/`} class="btn btn--primary">
+          Explorar Especies
+          <span>→</span>
+        </a>
+        <a href={`${b}/cuidados/`} class="btn btn--outline">
+          Guía de Cuidados
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__scroll reveal reveal--5" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section class="stats section--sm">
+    <div class="container">
+      <div class="stats__grid">
+        <div class="stat reveal reveal--1">
+          <span class="stat__number">900+</span>
+          <span class="stat__label">{t('home.stats.species')}</span>
+        </div>
+        <div class="stat reveal reveal--2">
+          <span class="stat__number">19</span>
+          <span class="stat__label">{t('home.stats.genera')}</span>
+        </div>
+        <div class="stat reveal reveal--3">
+          <span class="stat__number">9</span>
+          <span class="stat__label">{t('home.stats.families')}</span>
+        </div>
+        <div class="stat reveal reveal--4">
+          <span class="stat__number">60+</span>
+          <span class="stat__label">{t('home.stats.countries')}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="about section">
+    <div class="container about__inner">
+      <div class="about__text">
+        <div class="section-header">
+          <span class="section-header__eyebrow">Sobre nosotros</span>
+          <h2 class="section-header__title reveal">{t('home.about.title')}</h2>
+          <div class="section-header__line reveal"></div>
+        </div>
+        <p class="reveal reveal--2">{t('home.about.text1')}</p>
+        <p class="reveal reveal--3">{t('home.about.text2')}</p>
+      </div>
+      <div class="about__deco" aria-hidden="true">
+        <!-- Large botanical illustration -->
+        <svg viewBox="0 0 300 350" fill="none" xmlns="http://www.w3.org/2000/svg" class="about__deco-svg">
+          <!-- Cilia -->
+          {Array.from({length: 14}).map((_, i) => {
+            const angle = (i / 13) * 180 - 90;
+            const rad = angle * Math.PI / 180;
+            const x1 = 150 + Math.cos(rad) * 55;
+            const y1 = 200 + Math.sin(rad) * 28;
+            const x2 = 150 + Math.cos(rad) * 130;
+            const y2 = 200 + Math.sin(rad) * 65;
+            return <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8B2212" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>;
+          })}
+          <!-- Trap body -->
+          <ellipse cx="150" cy="200" rx="55" ry="28" stroke="#4A5C1A" stroke-width="2.5" opacity="0.8"/>
+          <path d="M95 200 Q150 180 205 200" stroke="#3D4F12" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <!-- Inner detail -->
+          <ellipse cx="150" cy="200" rx="40" ry="20" stroke="#3D4F12" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+          <!-- Stem + leaf -->
+          <path d="M150 228 Q130 260 120 300" stroke="#3D4F12" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+          <path d="M138 255 Q100 240 80 255 Q100 268 138 255" stroke="#4A5C1A" stroke-width="1.5" fill="#1c2410" opacity="0.7"/>
+          <!-- Small plant -->
+          {Array.from({length: 8}).map((_, i) => {
+            const angle = (i / 7) * 160 - 80;
+            const rad = angle * Math.PI / 180;
+            const x2 = 60 + Math.cos(rad) * 50;
+            const y2 = 100 + Math.sin(rad) * 25;
+            return <line x1="60" y1="100" x2={x2} y2={y2} stroke="#8B2212" stroke-width="1" stroke-linecap="round" opacity="0.5"/>;
+          })}
+          <ellipse cx="60" cy="100" rx="22" ry="11" stroke="#4A5C1A" stroke-width="1.5" opacity="0.5"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED SPECIES ===== -->
+  <section class="featured section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-header__eyebrow">Catálogo</span>
+        <h2 class="section-header__title reveal">{t('home.featured.title')}</h2>
+        <div class="section-header__line reveal"></div>
+      </div>
+
+      <div class="featured__grid">
+        {featured.map((sp, i) => (
+          <SpeciesCard species={sp} lang="es" index={i} />
+        ))}
+      </div>
+
+      <div class="featured__more reveal">
+        <a href={`${b}/especies/`} class="btn btn--outline">
+          {t('home.featured.link')}
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CARE TEASER ===== -->
+  <section class="care-teaser section">
+    <div class="care-teaser__bg" aria-hidden="true"></div>
+    <div class="container care-teaser__inner">
+      <div class="care-teaser__content reveal">
+        <span class="section-header__eyebrow">Cultivo</span>
+        <h2>{t('home.care.title')}</h2>
+        <p>{t('home.care.text')}</p>
+        <a href={`${b}/cuidados/`} class="btn btn--primary" style="margin-top: 1.5rem;">
+          {t('home.care.link')}
+          <span>→</span>
+        </a>
+      </div>
+      <div class="care-teaser__icons reveal reveal--2" aria-hidden="true">
+        <div class="care-icon">
+          <div class="care-icon__symbol">💧</div>
+          <span>Agua destilada</span>
+        </div>
+        <div class="care-icon">
+          <div class="care-icon__symbol">☀</div>
+          <span>Pleno sol</span>
+        </div>
+        <div class="care-icon">
+          <div class="care-icon__symbol">🌿</div>
+          <span>Sin nutrientes</span>
+        </div>
+        <div class="care-icon">
+          <div class="care-icon__symbol">❄</div>
+          <span>Hibernación</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 8rem 0 4rem;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero__bg-svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+  }
+
+  .hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--crimson-mid);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    max-width: none;
+  }
+
+  .hero__title {
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 1.05;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__title em {
+    color: var(--green-light);
+    font-style: italic;
+    display: block;
+  }
+
+  .hero__subtitle {
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    color: var(--cream-dim);
+    line-height: 1.7;
+    max-width: 56ch;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero__ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hero__scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(180deg, var(--green-mid) 0%, transparent 100%);
+    animation: float 2s ease-in-out infinite;
+  }
+
+  /* ---- Stats ---- */
+  .stats {
+    border-top: 1px solid rgba(74,92,26,0.15);
+    border-bottom: 1px solid rgba(74,92,26,0.15);
+    background: var(--bg-secondary);
+  }
+
+  .stats__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    border-right: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat__number {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    color: var(--green-light);
+    line-height: 1;
+  }
+
+  .stat__label {
+    font-size: 0.78rem;
+    color: var(--cream-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  /* ---- About ---- */
+  .about__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .about__text p {
+    margin-bottom: 1.25rem;
+  }
+
+  .about__deco {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.6;
+  }
+
+  .about__deco-svg {
+    width: 100%;
+    max-width: 280px;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* ---- Featured ---- */
+  .featured__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: var(--space-xl);
+  }
+
+  .featured__more {
+    text-align: center;
+  }
+
+  /* ---- Care Teaser ---- */
+  .care-teaser {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .care-teaser__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 50%, rgba(74,92,26,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 30% 50%, rgba(139,34,18,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .care-teaser__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .care-teaser__content h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    margin: 0.5rem 0 1rem;
+  }
+
+  .care-teaser__icons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .care-icon {
+    background: var(--bg-card);
+    border: 1px solid rgba(74,92,26,0.15);
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .care-icon:hover {
+    border-color: rgba(74,92,26,0.4);
+    box-shadow: var(--glow-green);
+  }
+
+  .care-icon__symbol {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .care-icon span {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.85rem;
+    color: var(--cream-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 1024px) {
+    .featured__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stats__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .about__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .about__deco { display: none; }
+
+    .featured__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .care-teaser__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

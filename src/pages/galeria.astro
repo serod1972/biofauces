@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import { species } from '../data/species';
+import { useTranslations } from '../i18n/utils';
+
+const t = useTranslations('es');
+
+// Collect all images with captions
+const galleryItems = species.flatMap(sp =>
+  sp.images.map(img => ({
+    src: img,
+    alt: `${sp.nameEs} — ${sp.scientific}`,
+    caption: `${sp.nameEs} · ${sp.scientific}`,
+  }))
+);
+---
+
+<BaseLayout
+  title="Galería"
+  description="Galería fotográfica de plantas carnívoras. Venus atrapamoscas, Nepenthes, Sarracenia, Drosera y más."
+  lang="es"
+>
+  <!-- Header -->
+  <section class="gallery-hero">
+    <div class="container">
+      <p class="section-header__eyebrow reveal">Fotografía</p>
+      <h1 class="gallery-hero__title reveal reveal--2">{t('gallery.title')}</h1>
+      <p class="gallery-hero__subtitle reveal reveal--3">{t('gallery.subtitle')}</p>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery-content section">
+    <div class="container">
+      <GalleryGrid items={galleryItems} />
+    </div>
+  </section>
+
+  <!-- Attribution -->
+  <section class="gallery-attribution section--sm">
+    <div class="container">
+      <p class="attribution-text">
+        Fotografías <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">vía Unsplash</a>.
+        Los fotógrafos retienen todos los derechos sobre sus obras.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .gallery-hero {
+    padding: 8rem 0 3rem;
+    border-bottom: 1px solid rgba(74,92,26,0.12);
+  }
+
+  .gallery-hero__title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin: 0.5rem 0 1rem;
+  }
+
+  .gallery-hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--cream-dim);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    max-width: 50ch;
+  }
+
+  .gallery-attribution {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: var(--space-lg) 0;
+  }
+
+  .attribution-text {
+    font-size: 0.82rem;
+    color: var(--cream-muted);
+    text-align: center;
+    max-width: none;
+  }
+
+  .attribution-text a {
+    color: var(--cream-dim);
+    transition: color 180ms ease;
+  }
+
+  .attribution-text a:hover {
+    color: var(--green-light);
+  }
+</style>

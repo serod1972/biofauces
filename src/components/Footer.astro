@@ -1,0 +1,249 @@
+---
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang?: string;
+}
+
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang as Lang);
+const base = import.meta.env.BASE_URL;
+const b = base.endsWith('/') ? base.slice(0, -1) : base;
+const isEs = lang === 'es';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <!-- Decorative cilia top border -->
+  <div class="footer__cilia" aria-hidden="true">
+    {Array.from({length: 24}).map((_, i) => (
+      <div class="footer__cilium" style={`animation-delay: ${i * 0.08}s; height: ${20 + Math.sin(i * 0.7) * 12}px`}></div>
+    ))}
+  </div>
+
+  <div class="container">
+    <div class="footer__grid">
+      <!-- Brand -->
+      <div class="footer__brand">
+        <div class="footer__logo">
+          <img
+            src={`${b}/logo-biofauces.jpg`}
+            alt="Biofauces logo"
+            class="footer__logo-img"
+            width="44"
+            height="44"
+          />
+          <span>BIOFAUCES</span>
+        </div>
+        <p class="footer__tagline">{isEs ? 'El mundo de las plantas carnívoras' : 'The world of carnivorous plants'}</p>
+      </div>
+
+      <!-- Navigation -->
+      <div class="footer__nav">
+        <h4 class="footer__heading">{isEs ? 'Navegación' : 'Navigation'}</h4>
+        <ul>
+          <li><a href={isEs ? `${b}/` : `${b}/en/`}>{isEs ? 'Inicio' : 'Home'}</a></li>
+          <li><a href={isEs ? `${b}/especies/` : `${b}/en/species/`}>{isEs ? 'Especies' : 'Species'}</a></li>
+          <li><a href={isEs ? `${b}/cuidados/` : `${b}/en/care/`}>{isEs ? 'Cuidados' : 'Care Guide'}</a></li>
+          <li><a href={isEs ? `${b}/galeria/` : `${b}/en/gallery/`}>{isEs ? 'Galería' : 'Gallery'}</a></li>
+        </ul>
+      </div>
+
+      <!-- Credits -->
+      <div class="footer__credits">
+        <h4 class="footer__heading">{t('footer.photos')}</h4>
+        <p class="footer__credit-text">
+          {t('footer.photos')} {t('footer.unsplash')}.
+          {isEs
+            ? 'Los fotógrafos retienen los derechos de sus obras.'
+            : 'Photographers retain rights to their work.'}
+        </p>
+        <a
+          href="https://unsplash.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer__unsplash"
+        >
+          Unsplash ↗
+        </a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">
+        © {year} Biofauces. {t('footer.rights')}.
+      </p>
+      <div class="footer__langs">
+        <a href={`${b}/`} class={isEs ? 'footer__lang-active' : ''}>ES</a>
+        <span>/</span>
+        <a href={`${b}/en/`} class={!isEs ? 'footer__lang-active' : ''}>EN</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid rgba(74, 92, 26, 0.15);
+    padding-top: 0;
+    margin-top: var(--space-2xl);
+    position: relative;
+  }
+
+  /* Decorative cilia */
+  .footer__cilia {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 1rem;
+    height: 40px;
+    overflow: hidden;
+  }
+
+  .footer__cilium {
+    width: 1.5px;
+    background: linear-gradient(180deg, var(--crimson) 0%, transparent 100%);
+    flex-shrink: 0;
+    animation: ciliumSway 3s ease-in-out infinite alternate;
+    transform-origin: bottom center;
+  }
+
+  @keyframes ciliumSway {
+    from { transform: rotate(-3deg) scaleY(0.9); }
+    to   { transform: rotate(3deg) scaleY(1.05); }
+  }
+
+  .footer .container {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-lg);
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .footer__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer__logo-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .footer__logo span {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+  }
+
+  .footer__tagline {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    color: var(--cream-muted);
+    font-size: 0.92rem;
+    max-width: none;
+  }
+
+  .footer__heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    margin-bottom: 1rem;
+  }
+
+  .footer__nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer__nav a {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    transition: color 180ms ease;
+  }
+
+  .footer__nav a:hover {
+    color: var(--green-light);
+  }
+
+  .footer__credit-text {
+    font-size: 0.85rem;
+    color: var(--cream-muted);
+    margin-bottom: 0.75rem;
+    max-width: none;
+  }
+
+  .footer__unsplash {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.85rem;
+    color: var(--cream-muted);
+    transition: color 180ms ease;
+  }
+
+  .footer__unsplash:hover {
+    color: var(--cream-dim);
+  }
+
+  .footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer__copy {
+    font-size: 0.82rem;
+    color: var(--cream-muted);
+    max-width: none;
+  }
+
+  .footer__langs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.82rem;
+    color: var(--cream-muted);
+  }
+
+  .footer__langs a {
+    color: var(--cream-muted);
+    transition: color 180ms ease;
+  }
+
+  .footer__langs a:hover,
+  .footer__lang-active {
+    color: var(--green-light) !important;
+  }
+
+  @media (max-width: 768px) {
+    .footer__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+  }
+</style>

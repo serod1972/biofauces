@@ -1,0 +1,208 @@
+---
+import type { SpeciesData } from '../data/species';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  species: SpeciesData;
+  lang?: string;
+  index?: number;
+}
+
+const { species, lang = 'es', index = 0 } = Astro.props;
+const t = useTranslations(lang as Lang);
+const base = import.meta.env.BASE_URL;
+const b = base.endsWith('/') ? base.slice(0, -1) : base;
+
+const isEs = lang === 'es';
+const href = isEs
+  ? `${b}/especies/${species.slug}/`
+  : `${b}/en/species/${species.slugEn}/`;
+
+const name = isEs ? species.nameEs : species.nameEn;
+const origin = isEs ? species.originEs : species.originEn;
+const mechanism = isEs ? species.mechanismEs : species.mechanismEn;
+
+const difficultyLabel = t(`species.${species.difficulty}` as any);
+---
+
+<article class={`species-card reveal reveal--${(index % 4) + 1}`}>
+  <a href={href} class="species-card__link" tabindex="-1" aria-hidden="true">
+    <div class="species-card__image-wrap">
+      <img
+        src={species.image}
+        alt={`${name} — ${species.scientific}`}
+        class="species-card__image"
+        loading="lazy"
+        width="400"
+        height="280"
+      />
+      <div class="species-card__image-overlay"></div>
+      <div class="species-card__badges">
+        <span class={`badge badge--${species.difficulty}`}>{difficultyLabel}</span>
+        <span class={`badge badge--${species.trapType}`}>{mechanism.split(' ').slice(0,2).join(' ')}</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="species-card__body">
+    <p class="species-card__scientific">{species.scientific}</p>
+    <h3 class="species-card__name">
+      <a href={href}>{name}</a>
+    </h3>
+    <p class="species-card__origin">{origin}</p>
+
+    <div class="species-card__meta">
+      <div class="species-card__stat">
+        <span class="species-card__stat-icon">☀</span>
+        <span>{species.light.split(' ').slice(0,3).join(' ')}</span>
+      </div>
+      <div class="species-card__stat">
+        <span class="species-card__stat-icon">💧</span>
+        <span>{species.water.split(' — ')[0]}</span>
+      </div>
+    </div>
+
+    <a href={href} class="species-card__cta">
+      {t('species.view')}
+      <span class="species-card__arrow">→</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  .species-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(74, 92, 26, 0.15);
+    overflow: hidden;
+    transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+    position: relative;
+  }
+
+  .species-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(74, 92, 26, 0.4);
+    box-shadow: var(--shadow-card), var(--glow-green);
+  }
+
+  .species-card__image-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+
+  .species-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .species-card:hover .species-card__image {
+    transform: scale(1.06);
+  }
+
+  .species-card__image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 50%,
+      rgba(8, 12, 4, 0.7) 100%
+    );
+  }
+
+  .species-card__badges {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .species-card__body {
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .species-card__scientific {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--crimson-mid);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+    max-width: none;
+  }
+
+  .species-card__name {
+    font-size: 1.35rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .species-card__name a {
+    color: var(--cream);
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .species-card__name a:hover {
+    color: var(--green-light);
+  }
+
+  .species-card__origin {
+    font-size: 0.82rem;
+    color: var(--cream-muted);
+    margin-bottom: 1rem;
+    font-style: italic;
+    max-width: none;
+  }
+
+  .species-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .species-card__stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--cream-muted);
+  }
+
+  .species-card__stat-icon {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  .species-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    text-decoration: none;
+    transition: gap 180ms ease, color 180ms ease;
+  }
+
+  .species-card__cta:hover {
+    gap: 0.75rem;
+    color: var(--green-bright);
+  }
+
+  .species-card__arrow {
+    transition: transform 180ms ease;
+  }
+
+  .species-card__cta:hover .species-card__arrow {
+    transform: translateX(4px);
+  }
+</style>
