@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { species } from '../../data/species';
+import { useTranslations } from '../../i18n/utils';
+
+const t = useTranslations('en');
+
+const trapLabels: Record<string, string> = {
+  active: 'Active trap',
+  passive: 'Passive trap',
+  adhesive: 'Adhesive',
+};
+---
+
+<BaseLayout
+  title="Curiosities — Biofauces"
+  description="The most surprising facts about carnivorous plants: speed, evolution, ecosystems and more."
+  lang="en"
+>
+  <!-- Hero -->
+  <section class="curio-hero">
+    <div class="container">
+      <p class="section-header__eyebrow reveal">{t('curiosities.eyebrow')}</p>
+      <h1 class="curio-hero__title reveal reveal--2">{t('curiosities.title')}</h1>
+      <p class="curio-hero__subtitle reveal reveal--3">{t('curiosities.subtitle')}</p>
+    </div>
+  </section>
+
+  <!-- Cards -->
+  <section class="curio-section section">
+    <div class="container">
+      <div class="curio-grid">
+        {species.map((sp, i) => (
+          <article class={`curio-card reveal reveal--${(i % 4) + 1}`}>
+            <div class="curio-card__header">
+              <div class="curio-card__meta">
+                <span class={`badge badge--${sp.trapType}`}>{trapLabels[sp.trapType]}</span>
+              </div>
+              <h2 class="curio-card__name">{sp.nameEn}</h2>
+              <p class="curio-card__scientific">{sp.scientific}</p>
+            </div>
+            <div class="curio-card__body">
+              <p class="curio-card__label">{t('curiosities.fact')}</p>
+              <p class="curio-card__text">{sp.curiosityEn}</p>
+            </div>
+            <div class="curio-card__footer">
+              <a href={`/en/species/${sp.slugEn}/`} class="curio-card__link">
+                View full profile →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .curio-hero {
+    padding: 8rem 0 3rem;
+    border-bottom: 1px solid rgba(74,92,26,0.12);
+  }
+
+  .curio-hero__title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin: 0.5rem 0 1rem;
+  }
+
+  .curio-hero__subtitle {
+    font-size: 1.05rem;
+    color: var(--cream-dim);
+    max-width: 60ch;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  .curio-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .curio-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(74,92,26,0.1);
+    border-top: 3px solid var(--crimson);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow var(--transition-base), border-top-color var(--transition-base);
+  }
+
+  .curio-card:hover {
+    box-shadow: var(--shadow-card);
+    border-top-color: var(--crimson-bright);
+  }
+
+  .curio-card__header {
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .curio-card__meta {
+    margin-bottom: 0.75rem;
+  }
+
+  .curio-card__name {
+    font-size: 1.4rem;
+    color: var(--cream);
+    margin-bottom: 0.2rem;
+  }
+
+  .curio-card__scientific {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--cream-muted);
+    max-width: none;
+    margin: 0;
+  }
+
+  .curio-card__body {
+    padding: 1.25rem 1.5rem;
+    flex: 1;
+  }
+
+  .curio-card__label {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crimson-mid);
+    margin-bottom: 0.6rem;
+    max-width: none;
+  }
+
+  .curio-card__text {
+    font-size: 0.97rem;
+    color: var(--cream-dim);
+    line-height: 1.75;
+    max-width: none;
+  }
+
+  .curio-card__footer {
+    padding: 0.75rem 1.5rem 1.25rem;
+  }
+
+  .curio-card__link {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.85rem;
+    color: var(--green-mid);
+    letter-spacing: 0.04em;
+    transition: color var(--transition-fast);
+  }
+
+  .curio-card__link:hover {
+    color: var(--green-bright);
+  }
+
+  @media (max-width: 768px) {
+    .curio-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

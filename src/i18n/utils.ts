@@ -27,12 +27,14 @@ export function getAlternateLangPath(url: URL, targetLang: Lang): string {
     'especies': 'species',
     'cuidados': 'care',
     'galeria': 'gallery',
+    'curiosidades': 'curiosities',
   };
   // Page name mapping EN → ES
   const enSegToEs: Record<string, string> = {
     'species': 'especies',
     'care': 'cuidados',
     'gallery': 'galeria',
+    'curiosities': 'curiosidades',
   };
 
   if (targetLang === 'en') {

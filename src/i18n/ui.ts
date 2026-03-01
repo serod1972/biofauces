@@ -12,6 +12,7 @@ export const ui = {
     'nav.species': 'Especies',
     'nav.care': 'Cuidados',
     'nav.gallery': 'Galería',
+    'nav.curiosities': 'Curiosidades',
     'nav.tagline': 'El mundo de las plantas carnívoras',
 
     // Home
@@ -94,6 +95,12 @@ export const ui = {
     'care.compare.humidity': 'Humedad',
     'care.compare.dormancy': 'Hibernación',
 
+    // Curiosities
+    'curiosities.eyebrow': 'Datos sorprendentes',
+    'curiosities.title': 'Curiosidades',
+    'curiosities.subtitle': 'Los secretos más fascinantes de las plantas carnívoras',
+    'curiosities.fact': 'Sabías que…',
+
     // Gallery
     'gallery.title': 'Galería',
     'gallery.subtitle': 'La belleza salvaje de las plantas carnívoras',
@@ -110,6 +117,7 @@ export const ui = {
     'nav.species': 'Species',
     'nav.care': 'Care Guide',
     'nav.gallery': 'Gallery',
+    'nav.curiosities': 'Curiosities',
     'nav.tagline': 'The world of carnivorous plants',
 
     // Home
@@ -191,6 +199,12 @@ export const ui = {
     'care.compare.water': 'Water',
     'care.compare.humidity': 'Humidity',
     'care.compare.dormancy': 'Dormancy',
+
+    // Curiosities
+    'curiosities.eyebrow': 'Surprising facts',
+    'curiosities.title': 'Curiosities',
+    'curiosities.subtitle': 'The most fascinating secrets of carnivorous plants',
+    'curiosities.fact': 'Did you know…',
 
     // Gallery
     'gallery.title': 'Gallery',
