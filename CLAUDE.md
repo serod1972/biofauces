@@ -210,8 +210,8 @@ const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
 
 export default defineConfig({
   site: isGitHubActions
-    ? 'https://serod1972.github.io'
-    : 'https://biofauces.vercel.app',
+    ? 'https://serod1972.github.io'   // GitHub Pages
+    : 'https://biofauces.vercel.app', // Vercel
   base: isGitHubActions ? '/biofauces' : '/',
 });
 ```

@@ -5,7 +5,7 @@ const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
 
 export default defineConfig({
   site: isGitHubActions
-    ? 'https://USERNAME.github.io'  // TODO: replace USERNAME with your GitHub username
+    ? 'https://serod1972.github.io'
     : 'https://biofauces.vercel.app',
   base: isGitHubActions ? '/biofauces' : '/',
   i18n: {
