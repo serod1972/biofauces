@@ -34,8 +34,7 @@ export default async function handler(req: Request): Promise<Response> {
     });
   }
 
-  const apiKey = (globalThis as any).process?.env?.OPENAI_API_KEY
-    ?? (globalThis as any).OPENAI_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
 
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'API key not configured' }), {
