@@ -8,6 +8,8 @@ const t = useTranslations('en');
 const featured = getFeaturedSpecies();
 const base = import.meta.env.BASE_URL;
 const b = base.endsWith('/') ? base.slice(0, -1) : base;
+
+const HERO_IMG = 'https://inaturalist-open-data.s3.amazonaws.com/photos/108567955/large.jpg';
 ---
 
 <BaseLayout
@@ -15,47 +17,15 @@ const b = base.endsWith('/') ? base.slice(0, -1) : base;
   description="Biofauces — The world of carnivorous plants. Discover species profiles, care guides and photo gallery."
   lang="en"
 >
-  <!-- ===== HERO ===== -->
-  <section class="hero">
-    <div class="hero__bg" aria-hidden="true">
-      <svg class="hero__bg-svg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g opacity="0.12">
-          {Array.from({length: 18}).map((_, i) => {
-            const angle = (i / 17) * 180 - 90;
-            const rad = angle * Math.PI / 180;
-            const x1 = 600 + Math.cos(rad) * 80;
-            const y1 = 650 + Math.sin(rad) * 80;
-            const x2 = 600 + Math.cos(rad) * 380;
-            const y2 = 650 + Math.sin(rad) * 380;
-            return <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8B2212" stroke-width="1.5" stroke-linecap="round"/>;
-          })}
-          <ellipse cx="600" cy="650" rx="80" ry="40" stroke="#4A5C1A" stroke-width="2.5"/>
-        </g>
-        <g opacity="0.08" transform="translate(80, 200)">
-          {Array.from({length: 10}).map((_, i) => {
-            const angle = (i / 9) * 180 - 90;
-            const rad = angle * Math.PI / 180;
-            const x2 = Math.cos(rad) * 120;
-            const y2 = Math.sin(rad) * 120;
-            return <line x1="0" y1="0" x2={x2} y2={y2} stroke="#8B2212" stroke-width="1" stroke-linecap="round"/>;
-          })}
-          <ellipse cx="0" cy="0" rx="30" ry="15" stroke="#4A5C1A" stroke-width="1.5"/>
-        </g>
-        <defs>
-          <radialGradient id="heroBgEn" cx="50%" cy="80%" r="60%">
-            <stop offset="0%" stop-color="#1c2410" stop-opacity="0.8"/>
-            <stop offset="100%" stop-color="#080C04" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="1200" height="700" fill="url(#heroBgEn)"/>
-      </svg>
-    </div>
 
+  <!-- ===== HERO ===== -->
+  <section class="hero" style={`background-image: url('${HERO_IMG}')`}>
+    <div class="hero__overlay" aria-hidden="true"></div>
     <div class="container hero__content">
       <p class="hero__eyebrow reveal reveal--1">
-        <span class="deco-dot"></span>
+        <span class="hero__dot"></span>
         Biofauces
-        <span class="deco-dot"></span>
+        <span class="hero__dot"></span>
       </p>
       <h1 class="hero__title reveal reveal--2">
         The World of<br/>
@@ -65,72 +35,131 @@ const b = base.endsWith('/') ? base.slice(0, -1) : base;
         Discover the fascinating species that have conquered the most inhospitable environments on earth by turning the hunt into art.
       </p>
       <div class="hero__ctas reveal reveal--4">
-        <a href={`${b}/en/species/`} class="btn btn--primary">
-          {t('home.hero.cta')}
-          <span>→</span>
+        <a href={`${b}/en/species/`} class="hero__btn-primary">
+          Explore Species →
         </a>
-        <a href={`${b}/en/care/`} class="btn btn--outline">
-          {t('home.hero.cta2')}
+        <a href={`${b}/en/care/`} class="hero__btn-outline">
+          Care Guide
         </a>
       </div>
     </div>
-
     <div class="hero__scroll reveal reveal--5" aria-hidden="true">
       <div class="hero__scroll-line"></div>
     </div>
   </section>
 
   <!-- ===== STATS ===== -->
-  <section class="stats section--sm">
-    <div class="container">
-      <div class="stats__grid">
-        <div class="stat reveal reveal--1">
-          <span class="stat__number">900+</span>
-          <span class="stat__label">{t('home.stats.species')}</span>
-        </div>
-        <div class="stat reveal reveal--2">
-          <span class="stat__number">19</span>
-          <span class="stat__label">{t('home.stats.genera')}</span>
-        </div>
-        <div class="stat reveal reveal--3">
-          <span class="stat__number">9</span>
-          <span class="stat__label">{t('home.stats.families')}</span>
-        </div>
-        <div class="stat reveal reveal--4">
-          <span class="stat__number">60+</span>
-          <span class="stat__label">{t('home.stats.countries')}</span>
-        </div>
+  <section class="stats">
+    <div class="container stats__grid">
+      <div class="stat reveal reveal--1">
+        <span class="stat__number">900+</span>
+        <span class="stat__label">{t('home.stats.species')}</span>
+      </div>
+      <div class="stat reveal reveal--2">
+        <span class="stat__number">19</span>
+        <span class="stat__label">{t('home.stats.genera')}</span>
+      </div>
+      <div class="stat reveal reveal--3">
+        <span class="stat__number">9</span>
+        <span class="stat__label">{t('home.stats.families')}</span>
+      </div>
+      <div class="stat reveal reveal--4">
+        <span class="stat__number">60+</span>
+        <span class="stat__label">{t('home.stats.countries')}</span>
       </div>
     </div>
   </section>
 
-  <!-- ===== ABOUT ===== -->
-  <section class="about section">
-    <div class="container about__inner">
-      <div class="about__text">
-        <div class="section-header">
-          <span class="section-header__eyebrow">About us</span>
-          <h2 class="section-header__title reveal">{t('home.about.title')}</h2>
-          <div class="section-header__line reveal"></div>
-        </div>
-        <p class="reveal reveal--2">{t('home.about.text1')}</p>
-        <p class="reveal reveal--3">{t('home.about.text2')}</p>
+  <!-- ===== TRAP TYPES ===== -->
+  <section class="traps">
+    <div class="container">
+      <div class="traps__header reveal">
+        <span class="traps__eyebrow">Capture mechanisms</span>
+        <h2 class="traps__title">Three ways to <em>hunt</em></h2>
       </div>
-      <div class="about__deco" aria-hidden="true">
-        <svg viewBox="0 0 300 350" fill="none" xmlns="http://www.w3.org/2000/svg" class="about__deco-svg">
-          {Array.from({length: 14}).map((_, i) => {
-            const angle = (i / 13) * 180 - 90;
-            const rad = angle * Math.PI / 180;
-            const x1 = 150 + Math.cos(rad) * 55;
-            const y1 = 200 + Math.sin(rad) * 28;
-            const x2 = 150 + Math.cos(rad) * 130;
-            const y2 = 200 + Math.sin(rad) * 65;
-            return <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8B2212" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>;
-          })}
-          <ellipse cx="150" cy="200" rx="55" ry="28" stroke="#4A5C1A" stroke-width="2.5" opacity="0.8"/>
-          <path d="M95 200 Q150 180 205 200" stroke="#3D4F12" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-          <path d="M150 228 Q130 260 120 300" stroke="#3D4F12" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-        </svg>
+      <div class="traps__grid">
+
+        <!-- Active -->
+        <article class="trap-card reveal reveal--1">
+          <div class="trap-card__icon">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 56 L32 40" stroke="#A8C060" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M8 32 Q32 44 56 32 Q56 50 32 54 Q8 50 8 32Z" fill="rgba(168,192,96,0.12)" stroke="#A8C060" stroke-width="2"/>
+              <path d="M8 32 Q8 18 32 14 Q56 18 56 32" fill="rgba(168,192,96,0.07)" stroke="#A8C060" stroke-width="2"/>
+              <line x1="8" y1="32" x2="56" y2="32" stroke="#A8C060" stroke-width="2.5"/>
+              <line x1="14" y1="26" x2="10" y2="17" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="24" y1="19" x2="22" y2="10" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="32" y1="14" x2="32" y2="5" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="40" y1="19" x2="42" y2="10" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="50" y1="26" x2="54" y2="17" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="14" y1="38" x2="10" y2="47" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="24" y1="46" x2="22" y2="55" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="40" y1="46" x2="42" y2="55" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="50" y1="38" x2="54" y2="47" stroke="#E05050" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="27" y1="30" x2="26" y2="25" stroke="#D08080" stroke-width="1" stroke-linecap="round"/>
+              <line x1="32" y1="31" x2="32" y2="26" stroke="#D08080" stroke-width="1" stroke-linecap="round"/>
+              <line x1="37" y1="30" x2="38" y2="25" stroke="#D08080" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="trap-card__body">
+            <span class="trap-card__badge">Active</span>
+            <h3 class="trap-card__title">Snap trap</h3>
+            <p class="trap-card__text">The trap fires in milliseconds. Two touches to the sensitive hairs and the lobes snap shut faster than the insect can react.</p>
+            <p class="trap-card__species">Dionaea · Aldrovanda · Utricularia</p>
+          </div>
+        </article>
+
+        <!-- Passive -->
+        <article class="trap-card reveal reveal--2">
+          <div class="trap-card__icon">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 58 Q20 44 22 30 Q24 18 32 12 Q40 18 42 30 Q44 44 40 58Z" fill="rgba(168,192,96,0.12)" stroke="#A8C060" stroke-width="2"/>
+              <path d="M24 58 Q12 48 14 32 Q16 22 22 24" stroke="#A8C060" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M22 16 Q32 6 42 16 Q38 22 32 20 Q26 22 22 16Z" fill="rgba(168,192,96,0.14)" stroke="#A8C060" stroke-width="2"/>
+              <path d="M26 20 Q32 24 38 20" stroke="#A8C060" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M29 22 Q27 36 26 50" stroke="#A8C060" stroke-width="0.8" opacity="0.5" stroke-linecap="round"/>
+              <path d="M35 22 Q37 36 38 50" stroke="#A8C060" stroke-width="0.8" opacity="0.5" stroke-linecap="round"/>
+              <circle cx="26" cy="16" r="2.5" fill="#E05050" opacity="0.8"/>
+              <circle cx="32" cy="12" r="2.5" fill="#E05050" opacity="0.8"/>
+              <circle cx="38" cy="16" r="2.5" fill="#E05050" opacity="0.8"/>
+              <circle cx="29" cy="40" r="2" fill="#E05050" opacity="0.4"/>
+              <circle cx="37" cy="46" r="2" fill="#E05050" opacity="0.4"/>
+            </svg>
+          </div>
+          <div class="trap-card__body">
+            <span class="trap-card__badge">Passive</span>
+            <h3 class="trap-card__title">Pitcher trap</h3>
+            <p class="trap-card__text">Pitchers fill with digestive fluid. Insects fall in, lured by color and nectar, unable to escape the slippery walls.</p>
+            <p class="trap-card__species">Nepenthes · Sarracenia · Heliamphora · Cephalotus</p>
+          </div>
+        </article>
+
+        <!-- Adhesive -->
+        <article class="trap-card reveal reveal--3">
+          <div class="trap-card__icon">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 58 Q22 44 28 34 Q31 28 32 26" stroke="#A8C060" stroke-width="2.2" stroke-linecap="round"/>
+              <ellipse cx="42" cy="24" rx="12" ry="6" transform="rotate(-12 42 24)" fill="rgba(168,192,96,0.1)" stroke="#A8C060" stroke-width="1.8"/>
+              <line x1="32" y1="20" x2="28" y2="11" stroke="#A8C060" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="27" cy="9" r="3.5" fill="#E05050" opacity="0.9"/>
+              <line x1="38" y1="17" x2="36" y2="7" stroke="#A8C060" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="36" cy="5" r="3.5" fill="#E05050" opacity="0.9"/>
+              <line x1="44" y1="17" x2="48" y2="8" stroke="#A8C060" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="49" cy="6" r="3.5" fill="#E05050" opacity="0.9"/>
+              <line x1="50" y1="22" x2="56" y2="15" stroke="#A8C060" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="58" cy="13" r="3.5" fill="#E05050" opacity="0.9"/>
+              <line x1="52" y1="29" x2="58" y2="26" stroke="#A8C060" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="60" cy="25" r="3.5" fill="#E05050" opacity="0.9"/>
+            </svg>
+          </div>
+          <div class="trap-card__body">
+            <span class="trap-card__badge">Adhesive</span>
+            <h3 class="trap-card__title">Sticky tentacles</h3>
+            <p class="trap-card__text">Glistening mucilage droplets mimic morning dew. Insects get stuck while tentacles slowly curl around their prey.</p>
+            <p class="trap-card__species">Drosera · Pinguicula · Brocchinia</p>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
@@ -143,55 +172,63 @@ const b = base.endsWith('/') ? base.slice(0, -1) : base;
         <h2 class="section-header__title reveal">{t('home.featured.title')}</h2>
         <div class="section-header__line reveal"></div>
       </div>
-
       <div class="featured__grid">
         {featured.map((sp, i) => (
           <SpeciesCard species={sp} lang="en" index={i} />
         ))}
       </div>
-
       <div class="featured__more reveal">
         <a href={`${b}/en/species/`} class="btn btn--outline">
-          {t('home.featured.link')}
-          <span>→</span>
+          {t('home.featured.link')} →
         </a>
       </div>
     </div>
   </section>
 
   <!-- ===== CARE TEASER ===== -->
-  <section class="care-teaser section">
-    <div class="care-teaser__bg" aria-hidden="true"></div>
+  <section class="care-teaser">
     <div class="container care-teaser__inner">
       <div class="care-teaser__content reveal">
-        <span class="section-header__eyebrow">Cultivation</span>
-        <h2>{t('home.care.title')}</h2>
-        <p>{t('home.care.text')}</p>
-        <a href={`${b}/en/care/`} class="btn btn--primary" style="margin-top: 1.5rem;">
-          {t('home.care.link')}
-          <span>→</span>
+        <span class="care-teaser__eyebrow">Cultivation</span>
+        <h2 class="care-teaser__title">{t('home.care.title')}</h2>
+        <p class="care-teaser__text">{t('home.care.text')}</p>
+        <a href={`${b}/en/care/`} class="hero__btn-primary care-teaser__cta">
+          {t('home.care.link')} →
         </a>
       </div>
-      <div class="care-teaser__icons reveal reveal--2" aria-hidden="true">
-        <div class="care-icon">
-          <div class="care-icon__symbol">💧</div>
-          <span>Distilled water</span>
+      <div class="care-rules reveal reveal--2">
+        <div class="care-rule">
+          <span class="care-rule__num">01</span>
+          <div>
+            <strong class="care-rule__title">Distilled water</strong>
+            <p class="care-rule__desc">No minerals. Tray method, always.</p>
+          </div>
         </div>
-        <div class="care-icon">
-          <div class="care-icon__symbol">☀</div>
-          <span>Full sun</span>
+        <div class="care-rule">
+          <span class="care-rule__num">02</span>
+          <div>
+            <strong class="care-rule__title">Full sun</strong>
+            <p class="care-rule__desc">At least 6-8 hours of direct sunlight.</p>
+          </div>
         </div>
-        <div class="care-icon">
-          <div class="care-icon__symbol">🌿</div>
-          <span>Nutrient-free</span>
+        <div class="care-rule">
+          <span class="care-rule__num">03</span>
+          <div>
+            <strong class="care-rule__title">Nutrient-free</strong>
+            <p class="care-rule__desc">Peat + perlite. Never garden soil.</p>
+          </div>
         </div>
-        <div class="care-icon">
-          <div class="care-icon__symbol">❄</div>
-          <span>Dormancy</span>
+        <div class="care-rule">
+          <span class="care-rule__num">04</span>
+          <div>
+            <strong class="care-rule__title">Dormancy</strong>
+            <p class="care-rule__desc">Temperate species need a cold winter rest.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
+
 </BaseLayout>
 
 <style>
@@ -200,51 +237,84 @@ const b = base.endsWith('/') ? base.slice(0, -1) : base;
     display: flex;
     align-items: center;
     position: relative;
-    overflow: hidden;
-    padding: 8rem 0 4rem;
+    background-size: cover;
+    background-position: center 30%;
+    padding: 8rem 0 5rem;
   }
-  .hero__bg { position: absolute; inset: 0; pointer-events: none; }
-  .hero__bg-svg { width: 100%; height: 100%; position: absolute; inset: 0; }
-  .hero__content { position: relative; z-index: 1; max-width: 800px; }
-  .hero__eyebrow {
-    display: flex; align-items: center; gap: 0.75rem;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-style: italic; font-size: 1rem; color: var(--crimson-mid);
-    letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.25rem; max-width: none;
-  }
-  .hero__title { font-size: clamp(3rem, 7vw, 6.5rem); line-height: 1.05; color: var(--cream); margin-bottom: 1.5rem; }
-  .hero__title em { color: var(--green-light); font-style: italic; display: block; }
-  .hero__subtitle { font-size: clamp(1rem, 1.8vw, 1.2rem); color: var(--cream-dim); line-height: 1.7; max-width: 56ch; margin-bottom: 2.5rem; }
+  .hero__overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(5,10,2,0.88) 0%, rgba(10,20,4,0.70) 50%, rgba(5,10,2,0.60) 100%); }
+  .hero__content { position: relative; z-index: 1; max-width: 720px; }
+  .hero__eyebrow { display: flex; align-items: center; gap: 0.75rem; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 0.95rem; color: #A8C060; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.25rem; }
+  .hero__dot { width: 5px; height: 5px; border-radius: 50%; background: #C43B26; display: inline-block; flex-shrink: 0; }
+  .hero__title { font-size: clamp(3rem, 7vw, 6.5rem); line-height: 1.05; color: #F0EDE4; margin-bottom: 1.5rem; font-weight: 400; }
+  .hero__title em { color: #A8C060; font-style: italic; display: block; }
+  .hero__subtitle { font-size: clamp(1rem, 1.8vw, 1.15rem); color: rgba(240,237,228,0.75); line-height: 1.75; max-width: 52ch; margin-bottom: 2.5rem; }
   .hero__ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .hero__scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); }
-  .hero__scroll-line { width: 1px; height: 60px; background: linear-gradient(180deg, var(--green-mid) 0%, transparent 100%); animation: float 2s ease-in-out infinite; }
-  .stats { border-top: 1px solid rgba(74,92,26,0.15); border-bottom: 1px solid rgba(74,92,26,0.15); background: var(--bg-secondary); }
-  .stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-  .stat { text-align: center; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem; border-right: 1px solid rgba(255,255,255,0.04); }
+  .hero__btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 2rem; background: #8B2212; color: #F0EDE4; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1rem; font-weight: 500; letter-spacing: 0.05em; text-decoration: none; border: 1px solid #A82C18; transition: background 200ms ease, border-color 200ms ease; }
+  .hero__btn-primary:hover { background: #A82C18; border-color: #C43B26; color: #F0EDE4; }
+  .hero__btn-outline { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 2rem; background: transparent; color: #F0EDE4; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1rem; font-weight: 500; letter-spacing: 0.05em; text-decoration: none; border: 1px solid rgba(240,237,228,0.35); transition: border-color 200ms ease, background 200ms ease; }
+  .hero__btn-outline:hover { border-color: rgba(240,237,228,0.7); background: rgba(240,237,228,0.07); color: #F0EDE4; }
+  .hero__scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 1; }
+  .hero__scroll-line { width: 1px; height: 56px; background: linear-gradient(180deg, rgba(168,192,96,0.8) 0%, transparent 100%); animation: float 2.2s ease-in-out infinite; }
+
+  .stats { background: var(--bg-secondary); border-top: 1px solid rgba(74,92,26,0.15); border-bottom: 1px solid rgba(74,92,26,0.15); padding: var(--space-xl) 0; }
+  .stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { text-align: center; padding: 1rem 1.5rem; display: flex; flex-direction: column; gap: 0.4rem; border-right: 1px solid rgba(0,0,0,0.07); }
   .stat:last-child { border-right: none; }
-  .stat__number { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; color: var(--green-light); line-height: 1; }
-  .stat__label { font-size: 0.78rem; color: var(--cream-muted); letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Cormorant Garamond', Georgia, serif; }
-  .about__inner { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl); align-items: center; }
-  .about__text p { margin-bottom: 1.25rem; }
-  .about__deco { display: flex; justify-content: center; align-items: center; opacity: 0.6; }
-  .about__deco-svg { width: 100%; max-width: 280px; animation: float 6s ease-in-out infinite; }
+  .stat__number { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; color: var(--green-mid); line-height: 1; }
+  .stat__label { font-size: 0.75rem; color: var(--cream-muted); letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Cormorant Garamond', Georgia, serif; }
+
+  .traps { background: #07100A; padding: var(--space-2xl) 0; position: relative; overflow: hidden; }
+  .traps::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 50%, rgba(74,92,26,0.15) 0%, transparent 55%), radial-gradient(ellipse at 80% 50%, rgba(139,34,18,0.08) 0%, transparent 55%); pointer-events: none; }
+  .traps__header { text-align: center; margin-bottom: var(--space-xl); position: relative; }
+  .traps__eyebrow { display: block; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 0.9rem; letter-spacing: 0.15em; text-transform: uppercase; color: #A8C060; margin-bottom: 0.6rem; }
+  .traps__title { font-size: clamp(2rem, 4vw, 3.2rem); color: #F0EDE4; font-weight: 400; }
+  .traps__title em { color: #A8C060; font-style: italic; }
+  .traps__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; position: relative; }
+  .trap-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(168,192,96,0.15); border-top: 2px solid #A8C060; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; transition: background 250ms ease, border-color 250ms ease; }
+  .trap-card:hover { background: rgba(168,192,96,0.05); border-color: rgba(168,192,96,0.35); }
+  .trap-card__icon { width: 64px; height: 64px; flex-shrink: 0; }
+  .trap-card__icon svg { width: 100%; height: 100%; }
+  .trap-card__badge { display: inline-block; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #A8C060; border: 1px solid rgba(168,192,96,0.4); padding: 0.15rem 0.6rem; margin-bottom: 0.6rem; }
+  .trap-card__title { font-size: 1.35rem; color: #F0EDE4; margin-bottom: 0.75rem; font-weight: 400; }
+  .trap-card__text { font-size: 0.95rem; color: rgba(240,237,228,0.65); line-height: 1.75; margin-bottom: 1rem; max-width: none; }
+  .trap-card__species { font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 0.82rem; color: rgba(168,192,96,0.6); max-width: none; margin: 0; }
+
   .featured__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: var(--space-xl); }
   .featured__more { text-align: center; }
-  .care-teaser { position: relative; overflow: hidden; }
-  .care-teaser__bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 50%, rgba(74,92,26,0.08) 0%, transparent 60%), radial-gradient(ellipse at 30% 50%, rgba(139,34,18,0.05) 0%, transparent 60%); pointer-events: none; }
-  .care-teaser__inner { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); align-items: center; position: relative; z-index: 1; }
-  .care-teaser__content h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); margin: 0.5rem 0 1rem; }
-  .care-teaser__icons { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .care-icon { background: var(--bg-card); border: 1px solid rgba(74,92,26,0.15); padding: 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; transition: border-color var(--transition-base), box-shadow var(--transition-base); }
-  .care-icon:hover { border-color: rgba(74,92,26,0.4); box-shadow: var(--glow-green); }
-  .care-icon__symbol { font-size: 2rem; line-height: 1; }
-  .care-icon span { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 0.85rem; color: var(--cream-muted); letter-spacing: 0.05em; }
-  @media (max-width: 1024px) { .featured__grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .care-teaser { background: #07100A; padding: var(--space-2xl) 0; position: relative; overflow: hidden; }
+  .care-teaser::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 50%, rgba(139,34,18,0.1) 0%, transparent 55%); pointer-events: none; }
+  .care-teaser__inner { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); align-items: center; position: relative; }
+  .care-teaser__eyebrow { display: block; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 0.9rem; letter-spacing: 0.15em; text-transform: uppercase; color: #C43B26; margin-bottom: 0.6rem; }
+  .care-teaser__title { font-size: clamp(1.8rem, 3.5vw, 2.8rem); color: #F0EDE4; margin-bottom: 1rem; font-weight: 400; }
+  .care-teaser__text { font-size: 1rem; color: rgba(240,237,228,0.65); line-height: 1.75; max-width: 48ch; margin-bottom: 0; }
+  .care-teaser__cta { margin-top: 2rem; display: inline-flex; }
+  .care-rules { display: flex; flex-direction: column; gap: 0; }
+  .care-rule { display: flex; align-items: flex-start; gap: 1.25rem; padding: 1.25rem 0; border-bottom: 1px solid rgba(168,192,96,0.12); }
+  .care-rule:first-child { border-top: 1px solid rgba(168,192,96,0.12); }
+  .care-rule__num { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 0.75rem; font-weight: 600; color: #8B2212; letter-spacing: 0.1em; line-height: 1.6; flex-shrink: 0; width: 2rem; text-align: right; }
+  .care-rule__title { display: block; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.1rem; font-weight: 600; color: #F0EDE4; letter-spacing: 0.02em; margin-bottom: 0.2rem; }
+  .care-rule__desc { font-size: 0.88rem; color: rgba(240,237,228,0.5); line-height: 1.5; max-width: none; margin: 0; }
+
+  @media (max-width: 1024px) {
+    .featured__grid { grid-template-columns: repeat(2, 1fr); }
+    .traps__grid { grid-template-columns: 1fr; max-width: 540px; margin: 0 auto; }
+  }
   @media (max-width: 768px) {
+    .hero { padding: 7rem 0 4rem; min-height: 90vh; }
+    .hero__title { font-size: clamp(2.5rem, 10vw, 4rem); }
+    .hero__subtitle { font-size: 1rem; }
+    .hero__ctas { flex-direction: column; align-items: flex-start; }
+    .hero__btn-primary, .hero__btn-outline { width: 100%; justify-content: center; }
     .stats__grid { grid-template-columns: repeat(2, 1fr); }
-    .about__inner { grid-template-columns: 1fr; }
-    .about__deco { display: none; }
+    .stat { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.07); padding: 1.25rem; }
+    .stat:last-child, .stat:nth-child(2) { border-bottom: none; }
+    .traps__grid { max-width: 100%; }
     .featured__grid { grid-template-columns: 1fr; }
     .care-teaser__inner { grid-template-columns: 1fr; }
+    .care-teaser__text { max-width: none; }
+  }
+  @media (max-width: 480px) {
+    .hero__title { font-size: clamp(2.2rem, 9vw, 3rem); }
   }
 </style>
