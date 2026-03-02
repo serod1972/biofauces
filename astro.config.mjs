@@ -16,6 +16,6 @@ export default defineConfig({
     },
   },
   build: {
-    assets: '_assets',
+    assets: 'assets',
   },
 });
