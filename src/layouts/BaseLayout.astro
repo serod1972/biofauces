@@ -16,7 +16,7 @@ interface Props {
 const {
   title,
   description = 'Biofauces — El mundo de las plantas carnívoras. Guías de cuidados, fichas de especies y galería fotográfica.',
-  image = '/biofauces/og-default.jpg',
+  image = `${import.meta.env.BASE_URL}logo-biofauces.jpg`,
   lang = 'es',
 } = Astro.props;
 
