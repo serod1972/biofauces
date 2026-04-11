@@ -34,7 +34,7 @@ export default async function handler(req: Request): Promise<Response> {
     });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'API key not configured' }), {
@@ -68,17 +68,18 @@ export default async function handler(req: Request): Promise<Response> {
   );
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 600,
+        system: SYSTEM_PROMPT,
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
           ...trimmedHistory,
           { role: 'user', content: message.trim().slice(0, 1000) },
         ],
@@ -87,7 +88,7 @@ export default async function handler(req: Request): Promise<Response> {
 
     if (!response.ok) {
       const errText = await response.text();
-      console.error('OpenAI API error:', response.status, errText);
+      console.error('Anthropic API error:', response.status, errText);
       return new Response(
         JSON.stringify({ error: 'Error calling AI service' }),
         { status: 502, headers: corsHeaders }
@@ -95,9 +96,9 @@ export default async function handler(req: Request): Promise<Response> {
     }
 
     const data = await response.json() as {
-      choices: { message: { content: string } }[];
+      content: { type: string; text: string }[];
     };
-    const reply = data.choices?.[0]?.message?.content ?? 'Lo siento, no pude generar una respuesta.';
+    const reply = data.content?.[0]?.text ?? 'Lo siento, no pude generar una respuesta.';
 
     return new Response(JSON.stringify({ reply }), { headers: corsHeaders });
   } catch (err) {
